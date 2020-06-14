@@ -12,6 +12,7 @@ import (
 
 var (
 	youtubeService *youtube.Service
+	activeTasks    = 0
 )
 
 func main() {
@@ -40,7 +41,7 @@ func main() {
 	if err != nil {
 		log.Println(err.Error())
 	}
-	log.Println("Starting telegram bot")
+	log.Printf("Starting telegram bot @%s", bot.Me.Username)
 	bot.Start()
 	defer bot.Stop()
 }
@@ -52,7 +53,16 @@ func HandleYoutubeCommand(bot *telebot.Bot) func(m *telebot.Message) {
 			_, _ = bot.Reply(m, "Query must be at least 5 characters long\ne.g.: `/yt what is love`")
 			return
 		}
-		log.Printf("[@%s] User @%s requested \"%s\"", m.Chat.Username, m.Sender.Username, query)
+		if activeTasks >= config.Get().MaximumActiveTasks {
+			_, _ = bot.Reply(m, "Ask me again in a few seconds, I'm busy.")
+			return
+		}
+		activeTasks++
+		defer func() {
+			activeTasks--
+		}()
+		chatName := extractNameFromChat(m.Chat)
+		log.Printf("[@%s] User @%s requested \"%s\"", chatName, m.Sender.Username, query)
 		statusMessage, _ := bot.Reply(m, "⌛ Give me a moment...")
 		media, err := youtubeService.SearchAndDownload(query)
 		if err != nil {
@@ -74,16 +84,16 @@ func HandleYoutubeCommand(bot *telebot.Bot) func(m *telebot.Message) {
 			FileName:  media.FilePath,
 		})
 		if err != nil {
-			log.Printf("[@%s] Ran into an error trying to process request from User @%s for query \"%s\": %s", m.Chat.Username, m.Sender.Username, query, err.Error())
+			log.Printf("[@%s] Ran into an error trying to process request from User @%s for query \"%s\": %s", chatName, m.Sender.Username, query, err.Error())
 			statusMessage, _ = bot.Edit(statusMessage, "❌ Ran into an error trying to process your query!")
 			return
 		}
 		statusMessage, _ = bot.Edit(statusMessage, "✅ File uploaded successfully!")
 		go func(bot *telebot.Bot, statusMessage *telebot.Message) {
-			time.Sleep(3 * time.Second)
+			time.Sleep(5 * time.Second)
 			_ = bot.Delete(statusMessage)
 		}(bot, statusMessage)
-		log.Printf("[@%s] Successfully completed request for user @%s's \"%s\" query", m.Chat.Username, m.Sender.Username, query)
+		log.Printf("[@%s] Successfully completed request for user @%s's \"%s\" query", chatName, m.Sender.Username, query)
 	}
 }
 
@@ -99,4 +109,12 @@ func extractQueryFromText(text string) string {
 	query = strings.ReplaceAll(query, "`", "")
 	query = strings.ReplaceAll(query, "\\", "")
 	return query
+}
+
+func extractNameFromChat(chat *telebot.Chat) string {
+	identifier := chat.Username
+	if len(identifier) == 0 {
+		identifier = chat.Title
+	}
+	return identifier
 }

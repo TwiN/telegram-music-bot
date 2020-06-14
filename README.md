@@ -17,6 +17,7 @@ making it much less complex.
 | --- | --- | --- | --- |
 | TELEGRAM_BOT_TOKEN | Telegram bot token | yes | `""` |
 | MAXIMUM_AUDIO_DURATION_IN_SECONDS | Maximum duration of audio clips in second | no | `480` |
+| MAXIMUM_ACTIVE_TASKS | Maximum amount of tasks that can be ran in parallel | no | `5` |
 
 
 ## Prerequisites

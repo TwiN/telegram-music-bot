@@ -9,6 +9,7 @@ import (
 type Config struct {
 	TelegramToken                 string
 	MaximumAudioDurationInSeconds int
+	MaximumActiveTasks            int
 }
 
 var cfg *Config
@@ -26,6 +27,12 @@ func Load() {
 		cfg.MaximumAudioDurationInSeconds = 480
 	} else {
 		cfg.MaximumAudioDurationInSeconds = maximumAudioDurationInSeconds
+	}
+	maximumActiveTasks, err := strconv.Atoi(strings.TrimSpace(os.Getenv("MAXIMUM_ACTIVE_TASKS")))
+	if err != nil {
+		cfg.MaximumActiveTasks = 5
+	} else {
+		cfg.MaximumActiveTasks = maximumActiveTasks
 	}
 }
 

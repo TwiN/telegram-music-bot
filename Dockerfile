@@ -7,6 +7,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -mod vendor -a -installsuffix cgo -o bin/t
 FROM alpine:3.7
 ENV TELEGRAM_BOT_TOKEN=""
 ENV MAXIMUM_AUDIO_DURATION_IN_SECONDS=""
+ENV MAXIMUM_ACTIVE_TASKS=""
 ENV APP_HOME=/app
 WORKDIR ${APP_HOME}
 RUN apk --update add --no-cache ca-certificates ffmpeg python
