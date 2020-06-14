@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/TwinProduction/telegram-music-bot/core"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 	"time"
@@ -13,11 +14,14 @@ import (
 
 type Service struct {
 	maxDurationInSeconds int
+	fileDirectory        string
 }
 
 func NewService(maxDurationInSeconds int) *Service {
+	_ = os.Mkdir("data", os.ModePerm)
 	return &Service{
 		maxDurationInSeconds: maxDurationInSeconds,
+		fileDirectory:        "data",
 	}
 }
 
@@ -57,7 +61,7 @@ func (svc *Service) doSearchAndDownload(query string) SearchAndDownloadResult {
 			"--no-playlist",
 			"--match-filter", fmt.Sprintf("duration < %d & !is_live", svc.maxDurationInSeconds),
 			"--max-downloads", "1",
-			"--output", fmt.Sprintf("%%(title)s.mp3"),
+			"--output", fmt.Sprintf("%s/%%(title)s.mp3", svc.fileDirectory),
 			"--print-json",
 			"--ignore-errors", // Ignores unavailable videos
 		}
@@ -75,7 +79,7 @@ func (svc *Service) doSearchAndDownload(query string) SearchAndDownloadResult {
 			return SearchAndDownloadResult{
 				Media: core.NewMedia(
 					videoMetadata.Title,
-					fmt.Sprintf("%s.mp3", videoMetadata.Title),
+					videoMetadata.Filename,
 					videoMetadata.Uploader,
 					fmt.Sprintf("https://www.youtube.com/watch?v=%s", videoMetadata.ID),
 					videoMetadata.Thumbnail,
