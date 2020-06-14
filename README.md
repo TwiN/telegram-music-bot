@@ -15,7 +15,7 @@ making it much less complex.
 
 | Environment variable | Description | Required | Default |
 | --- | --- | --- | --- |
-| TELEGRAM_BOT_TOKEN | Discord bot token | yes | `""` |
+| TELEGRAM_BOT_TOKEN | Telegram bot token | yes | `""` |
 | MAXIMUM_AUDIO_DURATION_IN_SECONDS | Maximum duration of audio clips in second | no | `480` |
 
 
