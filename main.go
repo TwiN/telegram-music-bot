@@ -75,10 +75,7 @@ func HandleYoutubeCommand(bot *telebot.Bot) func(m *telebot.Message) {
 			File: telebot.File{
 				FileLocal: media.FilePath,
 			},
-			Duration: int(media.Duration.Seconds()),
-			Thumbnail: &telebot.Photo{
-				File: telebot.File{FileURL: media.Thumbnail},
-			},
+			Duration:  int(media.Duration.Seconds()),
 			Title:     media.Title,
 			Caption:   media.URL,
 			Performer: media.Uploader,
