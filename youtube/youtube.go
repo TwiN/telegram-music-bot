@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/TwinProduction/telegram-music-bot/core"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/TwiN/telegram-music-bot/core"
 )
 
 type Service struct {

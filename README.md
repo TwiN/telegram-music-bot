@@ -1,18 +1,16 @@
 # telegram-music-bot
-
 [![Docker pulls](https://img.shields.io/docker/pulls/twinproduction/telegram-music-bot)](https://cloud.docker.com/repository/docker/twinproduction/telegram-music-bot)
 
 This is a minimal music bot for Telegram.
 
 It uses `youtube-dl` to search and download the video as well as `ffmpeg` to extract the audio.
 
-This bot is very similar to [TwinProduction/discord-music-bot](https://github.com/TwinProduction/discord-music-bot), 
+This bot is very similar to [TwiN/discord-music-bot](https://github.com/TwiN/discord-music-bot), 
 the main difference being that this one does not require streaming, but only uploading the music file to Telegram, 
 making it much less complex.
 
 
 ## Usage
-
 | Environment variable | Description | Required | Default |
 | --- | --- | --- | --- |
 | TELEGRAM_BOT_TOKEN | Telegram bot token | yes | `""` |
@@ -21,23 +19,19 @@ making it much less complex.
 
 
 ## Prerequisites
-
 If you want to run it locally, you'll need the following applications:
 - youtube-dl
 - ffmpeg
 
 
 ## Docker
-
 ### Pulling from Docker Hub
-
 ```
 docker pull twinproduction/telegram-music-bot
 ```
 
 
 ### Building image locally
-
 Building the Docker image is done as following:
 
 ```

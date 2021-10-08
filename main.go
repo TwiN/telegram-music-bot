@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/TwinProduction/telegram-music-bot/config"
-	"github.com/TwinProduction/telegram-music-bot/youtube"
-	"gopkg.in/tucnak/telebot.v2"
 	"log"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/TwiN/telegram-music-bot/config"
+	"github.com/TwiN/telegram-music-bot/youtube"
+	"gopkg.in/tucnak/telebot.v2"
 )
 
 var (
